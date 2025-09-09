@@ -6,19 +6,17 @@ import os
 from models import db, User, Log
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///parkpi.db'
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///parkpi.db"
 db.init_app(app)
 
 with app.app_context():
     db.create_all()
-    
+
+
 @app.route("/")
 def home():
-    return render_template(
-        "index.html",
-        users=User.query.all(),
-        logs=Log.query.all()
-    )
+    return render_template("index.html", users=User.query.all(), logs=Log.query.all())
+
 
 @app.post("/users")
 def add_user():
@@ -26,11 +24,13 @@ def add_user():
     db.session.commit()
     return redirect("/")
 
+
 @app.post("/users/delete")
 def del_user():
     User.query.filter_by(code=request.form["code"]).delete()
     db.session.commit()
     return redirect("/")
+
 
 # starts the MQTT client in the background
 Thread(target=start_mqtt, args=(app, db, User, Log), daemon=True).start()
