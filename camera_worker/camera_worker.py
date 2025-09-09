@@ -4,8 +4,6 @@ import paho.mqtt.client as mqtt
 from paho.mqtt.client import CallbackAPIVersion
 import os
 import time
-import signal
-import sys
 from dotenv import load_dotenv
 
 load_dotenv(dotenv_path=".env")
@@ -75,6 +73,8 @@ while True:
         time.sleep(0.1)
         continue
 
+    cv2.imshow("QR Code Reader", frame)
+
     current_time = time.time()
     if current_time - last_status_time >= 5:
         print(f"Status: Frame {frame_count}, Unique QRs detected: {len(seen)}")
@@ -88,7 +88,7 @@ while True:
     for obj in codes:
         try:
             text = obj.data.decode("utf-8")
-            print(f"📱 QR detected: '{text}' (type: {obj.type})")
+            print(f"QR detected: '{text}' (type: {obj.type})")
 
             if text not in seen:
                 print(f"Publishing new code: {text}")
@@ -104,6 +104,10 @@ while True:
         except Exception as e:
             print(f"Error processing QR: {e}")
 
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+        break
+
+cv2.destroyAllWindows()
 cap.release()
 client.loop_stop()
 client.disconnect()
