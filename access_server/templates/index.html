@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ParkPi</title>
+  <style>
+    body { font-family: sans-serif; }
+    ul { list-style: none; padding: 0; }
+    li { margin-bottom: 5px; }
+    form.inline { display: inline; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>ParkPi</h1>
+  </header>
+
+  <main>
+
+    <section aria-labelledby="users-title">
+      <h2 id="users-title">Users</h2>
+
+      <form method="post" action="/users">
+        <div>
+          <label for="name">Name</label>
+          <input id="name" name="name" placeholder="Name" required>
+        </div>
+        <div>
+          <label for="code">QR Code</label>
+          <input id="code" name="code" placeholder="QR Code" required>
+        </div>
+        <button type="submit">Add</button>
+      </form>
+
+      <ul>
+        {% for u in users %}
+          <li>
+            <span>{{ u.name }}</span> — <span>{{ u.code }}</span>
+            <form class="inline" method="post" action="/users/delete">
+              <input type="hidden" name="code" value="{{ u.code }}">
+              <button type="submit">Delete</button>
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section aria-labelledby="logs-title">
+      <h2 id="logs-title">Logs</h2>
+      <ul>
+        {% for l in logs[-20:] %}
+          <li>
+            <article>
+              <p><strong>ID:</strong> {{ l.id }}</p>
+              <p><strong>Code:</strong> {{ l.code }}</p>
+              <p><strong>Decision:</strong> {{ l.decision }}</p>
+              <p><strong>Message:</strong> {{ l.msg }}</p>
+            </article>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+
+  </main>
+
+</body>
+</html>
