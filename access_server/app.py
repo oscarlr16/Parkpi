@@ -15,7 +15,7 @@ with app.app_context():
 
 @app.route("/")
 def home():
-    return render_template("index.html", users=User.query.all(), logs=Log.query.all())
+    return render_template("index.html", users=User.query.all(), logs=Log.query.all())  # noqa
 
 
 @app.post("/users")

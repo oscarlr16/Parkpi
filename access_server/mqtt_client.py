@@ -1,7 +1,6 @@
 import paho.mqtt.client as mqtt
 from paho.mqtt.client import CallbackAPIVersion
 import os
-from flask import current_app
 from dotenv import load_dotenv
 
 load_dotenv(dotenv_path="access_server/.env")
@@ -33,7 +32,7 @@ def start_mqtt(app, db, User, log):
             code = payload
 
             # decision
-            allow = db.session.query(User).filter_by(code=code).first() is not None
+            allow = db.session.query(User).filter_by(code=code).first() is not None  # noqa
             decision = "ALLOW" if allow else "DENY"
 
             # log
